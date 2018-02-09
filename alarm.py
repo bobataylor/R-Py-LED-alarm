@@ -34,7 +34,7 @@ def check_time(now, HOUR, MIN, TEST, TZ):
     return (hour == HOUR and mint == MIN and wday !=5 and wday !=6) or TEST
 
 def main():
-    if len(sys.argv) < 4444:
+    if len(sys.argv) < 4:
         print('Usage: python alarm.py HOUR MINUTE TIMEZONE')
         sys.exit()
 
