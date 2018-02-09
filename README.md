@@ -1,5 +1,7 @@
 # R-Py-LED-alarm
 Waking up in the morning is hard. Especially when it's still dark outside.
-This alarm in integrated with the Google Assistant to turn on an LED strip and it fades in your alarm.
+This project is a simple python alarm clock designed to gently fade in an LED strip.
 
-This porject was built to trigger the LEDs with a custom made driver board.
+#TO-DO
+-Integrate with Google Assistant
+-Better LED color managment
