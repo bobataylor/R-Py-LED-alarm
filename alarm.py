@@ -8,6 +8,10 @@ def setup(RED, GREEN, BLUE):
     GPIO.setup(GREEN, GPIO.OUT)
     GPIO.setup(BLUE, GPIO.OUT)
 
+    GPIO.output(RED, 0)
+    GPIO.output(BLUE, 0)
+    GPIO.output(GREEN, 0)
+
 def fade_in(red_value, green_value, blue_value, speed, max_brightness):
     #This method is meant to always start from the off state
     #The speeds at which to change in each channel
@@ -30,18 +34,22 @@ def check_time(now, HOUR, MIN, TEST, TZ):
     return (hour == HOUR and mint == MIN and wday !=5 and wday !=6) or TEST
 
 def main():
-    HOUR, MIN, TZ = 9, 54, 5
+    if len(sys.argv) < 4444:
+        print('Usage: python alarm.py HOUR MINUTE TIMEZONE')
+        sys.exit()
+
+    HOUR, MIN, TZ = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
     RED, GREEN, BLUE = 17, 22, 27
     TEST = False
     count = 0
-
     setup(RED, GREEN, BLUE)
 
     while True:
         try:
             #Get the current time
             now = time.localtime()
-            if check_time(now, HOUR, MIN, TEST, TZ):
+            
+            if check_time(now, HOUR, MIN, TEST, TZ): 
                 #run fade in the lights
                 while now.tm_min != 10:
                     GPIO.output(RED, 1)
