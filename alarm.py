@@ -58,7 +58,7 @@ def main():
     RED, GREEN, BLUE = 17, 27, 22
     pins = [RED, GREEN, BLUE]
     color = [255.0, 8.0, 0.0]
-    TEST = True
+    TEST = False
     count = 0
     
     try:
