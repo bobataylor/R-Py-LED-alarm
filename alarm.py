@@ -1,85 +1,74 @@
-import time, os, sys
+#processes are ending and taking the main process with them
+import time, os, sys 
 import RPi.GPIO as GPIO
+from multiprocessing import Process
 
-def setup(RED, GREEN, BLUE):
+def setup(pins):
     #Perform some GPIO setup
     GPIO.setmode(GPIO.BCM)
-    pins = [RED, GREEN, BLUE]
     GPIO.setup(pins, GPIO.OUT, initial=GPIO.LOW)
 
-def fade_in(red_value, green_value, blue_value, speed, max_brightness):
-    #This method is meant to always start from the off state
-    #The speeds at which to change in each channel
-    red_speed   = speed / red_value 
-    green_speed = speed / blue_value
-    blue_speed  = speed / green_value
-    
-    #Code for changing red channel
-    #TODO thread for each channel
-    #TODO create PWM objects for each channel
-    for x in range(0,red_value):
-        RED.ChangeDutyCycle(x)
-        time.sleep(red_speed)
 
-def check_time(now, HOUR, MIN, TEST, TZ):
+def check_time(HOUR, MIN, TZ):
+    now = time.localtime()
     hour = now.tm_hour - TZ
     mint = now.tm_min
     wday = now.tm_wday
 
-    return (hour == HOUR and mint == MIN and wday !=5 and wday !=6) or TEST
+    return (hour == HOUR and mint == MIN and wday !=5 and wday !=6)
 
-#TODO edit this code to reflect our naming conventions
-def color_test(channel, frequency, speed, step):
-    p = GPIO.PWM(channel, frequency)
-    p.start(0)
-    while True:
-        for dutyCycle in range(0, 101, step):
-            p.ChangeDutyCycle(dutyCycle)
-            time.sleep(speed)
-            for dutyCycle in range(100, -1, -step):
-            p.ChangeDutyCycle(dutyCycle)
-            time.sleep(speed)
-                                                                              
-                                                                                              
-def color_test_thread():
-    threads = []
-    threads.append(threading.Thread(target=color_test, args=(R, 300, 0.02, 5)))
-    threads.append(threading.Thread(target=color_test, args=(G, 300, 0.035, 5)))
-    threads.append(threading.Thread(target=color_test, args=(B, 300, 0.045, 5)))
-    for t in threads:
-        t.daemon = True
-        t.start()
-        for t in threads:
-            t.join()
+
+def fade_channel(channel, value, speed):
+    frequency = 200
+    led = GPIO.PWM(channel, frequency)
+    led.start(0)
+    #start the duty cycle at 0 and go up to value
+    duty = ((float(value) / 256.0) * 100.0) + 1.0
+    step = float(value) / (float(speed) * 60.0)
+    dutyCycle = 0
+    start = time.time()
+    while dutyCycle <= duty and dutyCycle <= 100:
+        led.ChangeDutyCycle(dutyCycle)
+        time.sleep(3)
+        dutyCycle += step
+    while time.time() - start <= (20*60):
+        time.sleep(10)
+
+def fade_in(pins, values, speed):
+    processes = []
+    for i in range(0,3):
+        if values[i] > 0:
+            processes.append(Process(target=fade_channel, args=(pins[i], values[i], speed)))
+    for p in processes:
+        p.daemon = True
+        p.start()
+    for p in processes:
+        p.join()
 
 
 def main():
     if len(sys.argv) < 4:
         print('Usage: python alarm.py HOUR MINUTE TIMEZONE')
+        print('HOUR = The hour you want to set the alarm at: 0 - 23')
+        print('MINUTE = The minute you want to set the alarm at: 0 -59')
+        print('TIMEZONE = Your local timezone\'s difference from UTC in hours.')
         sys.exit()
 
     HOUR, MIN, TZ = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
-    RED, GREEN, BLUE = 17, 22, 27
-    TEST = False
+    RED, GREEN, BLUE = 17, 27, 22
+    pins = [RED, GREEN, BLUE]
+    color = [255.0, 8.0, 0.0]
+    TEST = True
     count = 0
-
+    
     try:
-        setup(RED, GREEN, BLUE)
+        setup(pins)
         while True:
             #Get the current time
-            now = time.localtime()
-            
-            if check_time(now, HOUR, MIN, TEST, TZ): 
+            if check_time(HOUR, MIN, TZ) or TEST: 
                 #run fade in the lights
-                #fade_in(color)
                 start_time = time.time()
-                #Leave the lights on for 20 minutes
-                while time.time() - start_time < 20*60:
-                    GPIO.output(RED, 1)
-                    time.sleep(count)
-                    GPIO.output(RED, 0)
-                    time.sleep(.0005)
-                    count += .0000001
+                fade_in(pins, color, 10.0)
     except KeyboardInterrupt:
         pass
     finally:
