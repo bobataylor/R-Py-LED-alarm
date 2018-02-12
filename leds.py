@@ -42,7 +42,7 @@ class leds:
         '''
         for i in range(0,3):
             if color[i] > 0:
-                duty_cycle = (float(value[i])/256.0) * 100.0
+                duty_cycle = (float(value[i])/255.0) * 100.0
             else:
                 duty_cycle = 0
             self.channels[i].set_duty(duty_cycle)
@@ -57,13 +57,13 @@ class leds:
         #get the change in value (these are delta duty cycles)
         steps = []
         for i in range(0, 3):
-            delta = (color[i] / 256.0 - self.channels[i].duty_cycle)
+            delta = (color[i] / 255.0 - self.channels[i].duty_cycle)
             steps.append(delta / (speed * 60.0 * wait))
         
         done = False
         while not done:
             for i in range(0, 3):
                 self.channels[i].set_duty(self.channels[i].duty_cycle + steps[i])
-                if self.channels[i].duty_cycle <= color[i] / 256.0:
+                if self.channels[i].duty_cycle <= color[i] / 255.0:
                     done = False
             time.sleep(wait)
