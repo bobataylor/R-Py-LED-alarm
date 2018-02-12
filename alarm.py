@@ -1,12 +1,19 @@
 #processes are ending and taking the main process with them
 import time, os, sys 
 import RPi.GPIO as GPIO
-from multiprocessing import Process
+from leds import leds
 
-def setup(pins):
-    #Perform some GPIO setup
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(pins, GPIO.OUT, initial=GPIO.LOW)
+
+#RGB color values
+#TODO change values
+COLORS = {
+    'RED'    : [255.0, 0.0,   0.0], 
+    'ORANGE' : [255.0, 10.0, 0.0],
+    'YELLOW' : [100.0, 100.0, 0.0],
+    'GREEN'  : [0.0,   255.0, 0.0],
+    'BLUE'   : [0.0,   0.0,   255.0],
+    'PURPLE' : [255.0, 0.0,   255.0]
+}
 
 
 def check_time(HOUR, MIN, TZ):
@@ -16,34 +23,6 @@ def check_time(HOUR, MIN, TZ):
     wday = now.tm_wday
 
     return (hour == HOUR and mint == MIN and wday !=5 and wday !=6)
-
-
-def fade_channel(channel, value, speed):
-    frequency = 200
-    led = GPIO.PWM(channel, frequency)
-    led.start(0)
-    #start the duty cycle at 0 and go up to value
-    duty = ((float(value) / 256.0) * 100.0) + 1.0
-    step = float(value) / (float(speed) * 60.0)
-    dutyCycle = 0
-    start = time.time()
-    while dutyCycle <= duty and dutyCycle <= 100:
-        led.ChangeDutyCycle(dutyCycle)
-        time.sleep(3)
-        dutyCycle += step
-    while time.time() - start <= (20*60):
-        time.sleep(10)
-
-def fade_in(pins, values, speed):
-    processes = []
-    for i in range(0,3):
-        if values[i] > 0:
-            processes.append(Process(target=fade_channel, args=(pins[i], values[i], speed)))
-    for p in processes:
-        p.daemon = True
-        p.start()
-    for p in processes:
-        p.join()
 
 
 def main():
@@ -56,24 +35,22 @@ def main():
 
     HOUR, MIN, TZ = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
     RED, GREEN, BLUE = 17, 27, 22
-    pins = [RED, GREEN, BLUE]
-    color = [255.0, 8.0, 0.0]
-    TEST = False
-    count = 0
+    TEST = True
     
     try:
-        setup(pins)
+        GPIO.setmode(GPIO.BCM)
+        light = leds(RED, GREEN, BLUE, 300)
         while True:
             #Get the current time
             if check_time(HOUR, MIN, TZ) or TEST: 
                 #run fade in the lights
                 start_time = time.time()
-                fade_in(pins, color, 10.0)
+                light.fade_in(COLORS['ORANGE'], 10.0)
     except KeyboardInterrupt:
         pass
-    finally:
-        GPIO.cleanup()
-        sys.exit(0)
+    #finally:
+    #    GPIO.cleanup()
+    #    sys.exit(0)
 
 if __name__ == "__main__":
     main()
