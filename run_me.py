@@ -1,15 +1,17 @@
 import alarm, leds, g_socket
 from colors import colors
 import RPi.GPIO as GPIO
-import socket, threading, sys
+import socket, threading, sys, time
 
 def main():
-    HOUR, MIN, TZ = 6, 50, 5
+    HOUR, MIN, TZ = 6, 45, 5
     R, G, B = 17, 27, 22
     PORT = 7777
     TEST = sys.argv[1]
     fade_time = 10.0
-    if TEST: time = .1
+    if TEST == '1':
+        fade_time = .1
+        print('test', TEST)
 
     try:
         #TODO thread the alarm and the socket with the shared led_strip object
@@ -17,8 +19,13 @@ def main():
         led_strip = leds.leds(R, G, B, 300)
         
         while True:
-            if alarm.check_time(HOUR, MIN, TZ) or TEST:
-                led_strip.fade_in(colors.dark_orange, time)
+            if alarm.check_time(HOUR, MIN, TZ) or TEST == '1':
+                led_strip.on()
+                led_strip.fade_in(colors.dark_orange, fade_time)
+                led_strip.set_color(colors.dark_orange)
+                time.sleep(10*60)
+                les_strip.off()
+            time.sleep(30)
     except KeyboardInterrupt:
         pass
     finally:
