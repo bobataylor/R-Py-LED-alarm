@@ -12,24 +12,22 @@ This project started as a python alarm clock designed to gently fade in an LED s
   
   <li>Customizable</li>
   <ul>New LED lighting sequences and features can be easily created using the methods provided in the leds class. There is no need to worry about threading, PWM, the various color channels, or any low level control over the leds. For example, a stobe could be implemented as follows.
-  ```
+  ```python
   import leds, time, colors
   R, G, B, P = 22, 27, 25, 7 #pins
   led_strip = leds.(R, G, B, P, freq) #create an led object
-  
   #setup the led object
   led_strip.on()
   led_Strip.set_color(colors.white)
-  
   #stobe the lights
   while True:
     leds.set_brightness(100.0)
     time.sleep(wait)
     leds.set_brightness(0.0)
     time.sleep(wait)
-  
   led_strip.off()
-  ```</ul>
+  ```
+  </ul>
 </ul>
 
 # Dependencies
