@@ -20,10 +20,10 @@ led_strip = leds.(R, G, B, P, freq)
 led_strip.on()
 led_Strip.set_color(colors.white)
 while True:
-  leds.set_brightness(100.0)
-  time.sleep(wait)
-  leds.set_brightness(0.0)
-  time.sleep(wait)
+leds.set_brightness(100.0)
+time.sleep(wait)
+leds.set_brightness(0.0)
+time.sleep(wait)
 led_strip.off()
 ```
 
