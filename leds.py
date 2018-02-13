@@ -6,16 +6,19 @@ class channel:
         self.pin = pin
         self.frequency = freq
         self.duty_cycle = duty
-
-        GPIO.setup(pin, GPIO.OUT, initial=GPIO.LOW)
-        self.pwm = GPIO.PWM(pin, freq)
-        self.pwm.start(0)
+        self.pwm = None
 
     def set_duty(self, duty):
-        print(duty)
         self.pwm.ChangeDutyCycle(duty)
         self.duty_cycle = duty
 
+    def on(self):
+        GPIO.setup(self.pin, GPIO.OUT, initial=GPIO.LOW)
+        self.pwm = GPIO.PWM(self.pin, self.frequency)
+        self.pwm.start(0)
+    
+    def off(self):
+        self.pwm.stop()
 
 '''
 This class is a container for each of the 3 leds colors.
@@ -31,6 +34,16 @@ class leds:
         self.channels = [self.red, self.green, self.blue]
 
         self.color = [0.0, 0.0, 0.0]
+
+    def on(self):
+        self.red.on()
+        self.green.on()
+        self.blue.on()
+
+    def off(self):
+        self.red.off()
+        self.blue.off()
+        self.green.off()
 
     def set_color(self, color):
         '''
@@ -56,10 +69,8 @@ class leds:
         #Should work regardless of current values
 
         #first let's get the current RGB values of the strip
-
-        #now lets find each channels step size 
-        num_steps = float(speed) * 60.0 * (1.0/wait)
-        print('num_steps = {}'.format(num_steps))
+        #Then lets find each channels step size 
+        num_steps = (speed * 60.0 * (1.0/wait))
         step = [
                 (color[0] - self.color[0])/num_steps,
                 (color[1] - self.color[1])/num_steps,
@@ -71,8 +82,8 @@ class leds:
                     self.color[0] + step[0],
                     self.color[1] + step[1],
                     self.color[2] + step[2]]
-            print(step_color)
             self.set_color(step_color)
+            #not needed if our math is good
             if color == self.color:
                 break # we have reached the final color, exit this function
             time.sleep(wait)
