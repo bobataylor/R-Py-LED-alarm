@@ -3,7 +3,6 @@ Waking up in the morning is hard. Especially when it's still dark outside.
 This project started as a python alarm clock designed to gently fade in an LED strip, and slowly became an easy way to control RGB LEDs with a Rasberry Pi and the Google Assistant.
 
 # Features
----
 - Easy RGB LED controll
 All the complicated bits, like PWM and duty cycles, are abstracted away into the leds and channels classes. An experienced user can modify these to add functionality as they please, but a more basic user can controll color and brightness with a predifend set of colors, or by passing in their own RGB values (0-255).
 
