@@ -12,6 +12,7 @@ class channel:
         self.pwm.start(0)
 
     def set_duty(self, duty):
+        print(duty)
         self.pwm.ChangeDutyCycle(duty)
         self.duty_cycle = duty
 
@@ -27,9 +28,9 @@ class leds:
         self.red   = channel(R, freq, 0.0)
         self.green = channel(G, freq, 0.0)
         self.blue  = channel(B, freq, 0.0)
-
         self.channels = [self.red, self.green, self.blue]
 
+        self.color = [0.0, 0.0, 0.0]
 
     def set_color(self, color):
         '''
@@ -40,30 +41,38 @@ class leds:
 
         We determine duty cycle by taking the ratio of the given value for the channel to its max value (value/256) then multiplying by 100.
         '''
+        self.color = color
         for i in range(0,3):
             if color[i] > 0:
-                duty_cycle = (float(value[i])/255.0) * 100.0
+                duty_cycle = (float(color[i])/255.0) * 100.0
             else:
                 duty_cycle = 0
             self.channels[i].set_duty(duty_cycle)
 
 
     def fade_in(self, color, speed):
-        #TODO change math for steps to account for wiat properly
         wait = 0.1
         #Determine the step size by which to change each channels duty cycle.
         #Should work regardless of current values
 
-        #get the change in value (these are delta duty cycles)
-        steps = []
-        for i in range(0, 3):
-            delta = (color[i] / 255.0 - self.channels[i].duty_cycle)
-            steps.append(delta / (speed * 60.0 * wait))
-        
-        done = False
-        while not done:
-            for i in range(0, 3):
-                self.channels[i].set_duty(self.channels[i].duty_cycle + steps[i])
-                if self.channels[i].duty_cycle <= color[i] / 255.0:
-                    done = False
+        #first let's get the current RGB values of the strip
+
+        #now lets find each channels step size 
+        num_steps = float(speed) * 60.0 * (1.0/wait)
+        print('num_steps = {}'.format(num_steps))
+        step = [
+                (color[0] - self.color[0])/num_steps,
+                (color[1] - self.color[1])/num_steps,
+                (color[2] - self.color[2])/num_steps]
+
+        #finally, set the new step color
+        for i in range(0, int(num_steps)):
+            step_color = [
+                    self.color[0] + step[0],
+                    self.color[1] + step[1],
+                    self.color[2] + step[2]]
+            print(step_color)
+            self.set_color(step_color)
+            if color == self.color:
+                break # we have reached the final color, exit this function
             time.sleep(wait)
