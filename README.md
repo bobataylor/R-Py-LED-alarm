@@ -15,12 +15,10 @@ This project started as a python alarm clock designed to gently fade in an LED s
 </ul>
 ```python
 import leds, time, colors
-R, G, B, P = 22, 27, 25, 7 #pins
-led_strip = leds.(R, G, B, P, freq) #create an led object
-#setup the led object
+R, G, B, P = 22, 27, 25, 7
+led_strip = leds.(R, G, B, P, freq)
 led_strip.on()
 led_Strip.set_color(colors.white)
-#stobe the lights
 while True:
   leds.set_brightness(100.0)
   time.sleep(wait)
