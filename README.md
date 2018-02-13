@@ -11,7 +11,8 @@ This project started as a python alarm clock designed to gently fade in an LED s
   <ul><p>RGB LED strips are cheap and fun, but their controllers and IR remotes are rather, well... bad. Here the controller is replaced by GPIO on a Rasberry Pi and the remote is replaced by integration with the Google Assistant. Custom commands can be added to g_socket.py and itgration is run through <a href="https://ifttt.com/">IFTTT</a>.</p></ul>
   
   <li>Customizable</li>
-  <ul>New LED lighting sequences and features can be easily created using the methods provided in the leds class. There is no need to worry about threading, PWM, the various color channels, or any low level control over the leds. For example, a stobe could be implemented as follows.
+  <ul>New LED lighting sequences and features can be easily created using the methods provided in the leds class. There is no need to worry about threading, PWM, the various color channels, or any low level control over the leds. For example, a stobe could be implemented as follows.</ul>
+</ul>
   ```python
   import leds, time, colors
   R, G, B, P = 22, 27, 25, 7 #pins
@@ -27,8 +28,6 @@ This project started as a python alarm clock designed to gently fade in an LED s
     time.sleep(wait)
   led_strip.off()
   ```
-  </ul>
-</ul>
 
 # Dependencies
 - This repository should be used with a driving circuit to deliver power to the LEDs and not to power the LEDs directly from the Raspbery Pi. In it's simplest form the curcuit can be 4 transistors, a power supply, and the Raspberry Pi wired to the bases of the transistors.<!--An example of said curcuit can be found on my blog.-->
