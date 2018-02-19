@@ -19,7 +19,7 @@ import leds, time, colors
 R, G, B = 22, 27, 25                #define pins
 freq = 300                          #define a frequency in Hz for the pwm to run at
 
-led_strip = leds.(R, G, B, freq) #create and setup an led object
+led_strip = leds.(R, G, B, freq)    #create and setup an led object
 led_Strip.set_color(colors.white)
 
 while True:                         #loop forever turning the lights on and off to create a strobe
