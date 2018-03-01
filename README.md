@@ -18,6 +18,7 @@ This project started as a python alarm clock designed to gently fade in an LED s
 import leds, time, colors
 R, G, B = 22, 27, 25                #define pins
 freq = 300                          #define a frequency in Hz for the pwm to run at
+wait = 20                           #20ms wait time for strobing
 
 led_strip = leds.(R, G, B, freq)    #create and setup an led object
 led_Strip.set_color(colors.white)
