@@ -32,7 +32,7 @@ class leds:
         self.red   = channel(R, freq, 0)
         self.green = channel(G, freq, 0)
         self.blue  = channel(B, freq, 0)
-        self.channels = [self.red, self.green, self.blue, self.power]
+        self.channels = [self.red, self.green, self.blue]
 
         self.color = [0, 0, 0]  
 
