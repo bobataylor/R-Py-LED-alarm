@@ -51,7 +51,7 @@ def g_listen(led_strip):
     sock = create(7777)
     sock.listen(1)
 
-    conn, addr = sock.accpet()
+    conn, addr = sock.accept()
     color = get_color(conn)
 
     led_strip.set_color(color)
