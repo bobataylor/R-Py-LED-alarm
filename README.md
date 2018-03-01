@@ -16,23 +16,21 @@ This project started as a python alarm clock designed to gently fade in an LED s
 
 ```
 import leds, time, colors
-R, G, B, P = 22, 27, 25, 7          #define pins
+R, G, B = 22, 27, 25                #define pins
+freq = 300                          #define a frequency in Hz for the pwm to run at
 
-led_strip = leds.(R, G, B, P, freq) #create and setup an led object
-led_strip.on()            
+led_strip = leds.(R, G, B, freq)    #create and setup an led object
 led_Strip.set_color(colors.white)
 
-while True:                         #loop forever changing the brightness to stobe the leds
-  leds.set_brightness(100.0)
+while True:                         #loop forever turning the lights on and off to create a strobe
+  led_strip.on()
   time.sleep(wait)
-  leds.set_brightness(0.0)
+  led_strip.off()
   time.sleep(wait)
-
-led_strip.off()                     #turn the strip off
 ```
 
 # Dependencies
-- This repository should be used with a driving circuit to deliver power to the LEDs and not to power the LEDs directly from the Raspbery Pi. In it's simplest form the curcuit can be 4 transistors, a power supply, and the Raspberry Pi wired to the bases of the transistors.<!--An example of said curcuit can be found on my blog.-->
+- This repository should be used with a driving circuit to deliver power to the LEDs and not to power the LEDs directly from the Raspbery Pi. In it's simplest form the curcuit can be 3 transistors, a power supply, and the Raspberry Pi wired to the bases of the transistors.<!--An example of said curcuit can be found on my blog.-->
 - This repository is designed with a common anode RGB LED strip, but the code should work with common cathode RGB LEDs as well. This only stipulation is that the driving circuit will need to be reversed.
 
 # Issues
