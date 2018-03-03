@@ -10,7 +10,8 @@ class channel:
         self.pwm = None
 
     def set_duty(self, duty):
-        self.pwm.ChangeDutyCycle(duty)
+        print self, duty
+        self.pwm.ChangeDutyCycle(int(duty))
         self.duty_cycle = duty
 
     def on(self):
@@ -55,12 +56,19 @@ class leds:
 
         We determine duty cycle by taking the ratio of the given value for the channel to its max value (value/256) then multiplying by 100.
         '''
+        if type(color) is not list:
+            try:
+                color = colors.dict[color]
+            except:
+                color = colors.white
+        print(color)
         self.color = color
         for i in range(0,3):
             if color[i] < 0:
                 color[i] = 0
-            elif color[i] > 100:
-                color[i] = 100
+            elif color[i] > 255:
+                color[i] = 255
+            print "i{} : color{} : corrected{}".format(i, color[i], colors.gamma[color[i]])
             duty_cycle = (float(colors.gamma[color[i]])/255.0) * 100.0
             self.channels[i].set_duty(duty_cycle)
 
