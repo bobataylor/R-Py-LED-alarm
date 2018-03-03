@@ -1,4 +1,4 @@
-import alarm, leds, g_socket
+import alarm, leds, socket
 from colors import colors
 import RPi.GPIO as GPIO
 import socket, threading, sys, time
@@ -6,12 +6,24 @@ import socket, threading, sys, time
 
 def assistant(led_strip):
     print('created thread for the Google Assistant')
+    HOST = ''
+    PORT = 7777
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((HOST, PORT))
+    s.listen(1)
     while True:
-        sock = g_socket.g_listen(7777)      # create a socket on port 7777
-        color = g_socket.get_color(sock)    # listen for connection and get color
-        
-        #consider adding mutex lock to the led_strip
-        led_strip.set_color(color)  # change color of the lights
+        conn, addr = s.accept()
+        color = ''
+        while True:
+            data = conn.recv(1024)
+            if not data:    break
+            color += data
+        conn.close()
+        index = color.find("&color=")
+        color = color[index+7:].lower()
+        print("you said {}".format(color))
+        led_strip.on()
+        led_strip.set_color(color)
 
 
 def alarmclock(led_strip, HOUR, MIN, TZ, TEST):
@@ -44,10 +56,14 @@ def main():
         
         tid1 = threading.Thread(target=assistant, args=[led_strip])
         tid2 = threading.Thread(target=alarmclock, args=[led_strip, HOUR, MIN, TZ, TEST])
+        tid1.daemon = True
+        tid2.daemon = True
         tid1.start()
         tid2.start()
-        tid1.join()
-        tid2.join()
+        #tid1.join()
+        #tid2.join()
+        while True:
+            time.sleep(1)
     except KeyboardInterrupt:
         pass
     finally:
