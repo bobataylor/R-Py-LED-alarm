@@ -17,11 +17,14 @@ class colors:
 144,146,148,150,152,154,156,158,160,162,164,167,169,171,173,175,\
 177,180,182,184,186,189,191,193,196,198,200,203,205,208,210,213,\
 215,218,220,223,225,228,231,233,236,239,241,244,247,249,252,255]
-    red    = [gamma[255], gamma[0],   gamma[0]]
-    orange = [gamma[255], gamma[10],  gamma[0]]
-    yellow = [gamma[100], gamma[100], gamma[0]]
-    green  = [gamma[0],   gamma[255], gamma[0]]
-    blue   = [gamma[0],   gamma[0],   gamma[255]]
-    purple = [gamma[255], gamma[0],   gamma[255]]
-    white  = [gamma[255], gamma[255], gamma[255]]
-    dark_orange = [gamma[120], gamma[2], gamma[0]]
+    red    = [255, 0,   0]
+    orange = [255, 128, 0]
+    yellow = [255, 255, 0]
+    green  = [0,   255, 0]
+    blue   = [0,   0,   255]
+    purple = [127, 0,   255]
+    pink   = [155, 0,   127]
+    white  = [255, 255, 255]
+    dark_orange = [153, 76, 0]
+
+    dict = {"red":red, "orange":orange, "yellow":yellow, "green":green, "blue":blue, "purple":purple, "white":white, "dark":dark_orange, "pink":pink}
