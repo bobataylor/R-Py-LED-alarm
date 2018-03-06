@@ -30,12 +30,12 @@ while True:                         #loop forever turning the lights on and off 
   time.sleep(wait)
 ```
 
+# Alarm
+- For now the alarm has to be set inside run_me.py. Set the hour out of 24, the minute, and your timezone's difference from UTC. You would think calling time.localtime() would return your local time, but for me it didn't. Whoops...
+
 # Dependencies
 - This repository should be used with a driving circuit to deliver power to the LEDs and not to power the LEDs directly from the Raspbery Pi. In it's simplest form the curcuit can be 3 transistors, a power supply, and the Raspberry Pi wired to the bases of the transistors.<!--An example of said curcuit can be found on my blog.-->
 - This repository is designed with a common anode RGB LED strip, but the code should work with common cathode RGB LEDs as well. This only stipulation is that the driving circuit will need to be reversed.
 
 # Issues
-- Some flickering is seen in the LED strip. It is believed to be a hardware issue, but has yet to be confirmed either way.
-
-# TO-DO
-- Thread alarm functionality and Google Assistant integration to run simultainiously
+- Some flickering is seen in the LED strip for certain colors.
