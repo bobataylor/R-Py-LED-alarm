@@ -20,7 +20,7 @@ class channel:
         self.pwm.start(self.duty_cycle)
     
     def off(self):
-        self.pwm.stop()
+        self.set_duty(0)
 
 '''
 This class is a container for each of the 3 leds colors.
