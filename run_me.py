@@ -42,7 +42,7 @@ def alarmclock(led_strip, HOUR, MIN, TZ, TEST):
 
 
 def main():
-    HOUR, MIN, TZ = 6, 45, 5
+    HOUR, MIN, TZ = 6, 45, -5
     R, G, B = 17, 27, 22 
     PORT = 7777
     TEST = sys.argv[1]

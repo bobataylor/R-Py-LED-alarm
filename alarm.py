@@ -4,7 +4,7 @@ import time
 
 def check_time(HOUR, MIN, TZ):
     now = time.localtime()
-    hour = now.tm_hour - TZ
+    hour = now.tm_hour + TZ
     mint = now.tm_min
     wday = now.tm_wday
 
