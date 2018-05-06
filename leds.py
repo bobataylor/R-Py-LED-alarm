@@ -26,7 +26,7 @@ class channel:
 This class is a container for each of the 3 leds colors.
 Each color is created as its own channel object.
 
-The single container approach is to simplify outside access to the leds by abstracting away the various color channels and making the leds appread as one object.
+The single container approach is to simplify outside access to the leds by abstracting away the various color channels and making the leds appear as one object.
 '''
 class leds:
     def __init__(self, R, G ,B, freq):
