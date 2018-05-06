@@ -1,6 +1,6 @@
-# R-Py-LED-alarm
+# Raspberry PY LED Controller
 Waking up in the morning is hard. Especially when it's still dark outside.
-This project started as a python alarm clock designed to gently fade in an LED strip, and slowly became an easy way to control RGB LEDs with a Rasberry Pi and the Google Assistant.
+This project started as a python alarm clock designed to gently fade in an LED strip, and became more of an easy way to control RGB LEDs with a Rasberry Pi and the Google Assistant.
 
 # Features
 <ul>
